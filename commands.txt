@@ -1,0 +1,2 @@
+ 5804* docker build -t ubuntu_vim .
+ 5805* docker run -it -v /tmp:/mydata ubuntu_vim
