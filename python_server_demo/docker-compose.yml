@@ -1,0 +1,35 @@
+# version of the Docker Compose file format
+version: '3.8'
+
+# This section defines the services (containers) to be created.
+services:
+  # This section defines the server service. 
+  # It instructs Docker Compose to build the container using the Dockerfile located in the current directory (.). 
+  # The dockerfile key specifies the filename as Dockerfile.
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ports key maps the host machine's port 5000 to the container's port 5000, allowing access to the Python server running inside the container.
+    ports:
+      - 5000:5000
+      # This line specifies that the server service depends on the db service. It ensures that the db service (database container) is started before the server service.
+    depends_on:
+      - db
+
+
+  # This section defines the db service. It builds the container using the Dockerfile located in the current directory (.) and specifies the filename as db.Dockerfile.
+  db:
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    ports:
+      - 5432:5432
+    volumes:
+        # creates a volume named db_data and mounts it to the /var/lib/postgresql/data directory inside the container. 
+        #This volume ensures that the database data is persisted even if the container is stopped or removed.
+      - db_data:/var/lib/postgresql/data
+
+# This section defines the db_data volume, which is referenced by the db service. It ensures the volume is created and available for use.
+volumes:
+  db_data:
